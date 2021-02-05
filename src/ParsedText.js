@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, Platform, TextInput } from 'react-native';
 import PropTypes from 'prop-types';
 
 import TextExtraction from './lib/TextExtraction';
@@ -125,10 +125,19 @@ class ParsedText extends React.Component {
     // Discard custom props before passing remainder to Text
     const { parse, childrenProps, ...remainder } = { ...this.props };
 
-    return (
+    return Platform.OS === 'android' ? (
       <Text ref={(ref) => (this._root = ref)} {...remainder}>
         {this.getParsedText()}
       </Text>
+    ) : (
+      <TextInput
+        editable={false}
+        multiline={true}
+        ref={(ref) => (this._root = ref)}
+        {...remainder}
+      >
+        {this.getParsedText()}
+      </TextInput>
     );
   }
 }
